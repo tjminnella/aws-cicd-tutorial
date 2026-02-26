@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-    
+
 jobs:
 
   build:
@@ -16,9 +16,12 @@ jobs:
       env:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        echo "${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION"
     - name: Build the Docker image
-      run: docker build -t aws-cicd-tutorial .
+      # run: docker build -t aws-cicd-tutorial .
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/$IMAGE_NAME:$IMAGE_VERSION
     - name: Push to Dockerhub
-      run: docker push tjminnella/aws-cicd-tutorial:latest
+      # run: docker push $DOCKER_USERNAME/aws-cicd-tutorial:latest
+      run: docker push ${{secrets.DOCKER_USER}}/$IMAGE_NAME:$IMAGE_VERSION
