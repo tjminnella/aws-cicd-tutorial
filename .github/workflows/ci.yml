@@ -3,13 +3,16 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-
+    paths: ["Dockerfile",".github/workflows/ci.yaml"]
 jobs:
 
   build:
 
     runs-on: ubuntu-latest
     environment: production
+    env:
+      IMAGE_NAME: aws-cicd-tutorial
+      IMAGE_VERSION: latest
     steps:
     - uses: actions/checkout@v4
     - name: Login to Dockerhub
@@ -18,10 +21,10 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        echo "${{secrets.DOCKER_USERNAME}}/aws-cicd-tutorial:latest"
+        echo "${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION"
     - name: Build the Docker image
       # run: docker build -t aws-cicd-tutorial .
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/aws-cicd-tutorial:latest
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION
     - name: Push to Dockerhub
       # run: docker push $DOCKER_USERNAME/aws-cicd-tutorial:latest
-      run: docker push ${{secrets.DOCKER_USER}}/aws-cicd-tutorial:latest
+      run: docker push ${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION
