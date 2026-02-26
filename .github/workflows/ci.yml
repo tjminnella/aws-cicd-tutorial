@@ -3,7 +3,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-    paths: ["Dockerfile",".github/workflows/ci.yaml"]
 jobs:
 
   build:
