@@ -1,0 +1,25 @@
+name: CI Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+        - completed
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+    environment: production
+    env:
+      IMAGE_NAME: aws-cicd-tutorial
+      IMAGE_VERSION: latest
+      DOCKER_CONTAINER: aws-cicd-tutorial-container
+    steps:
+    - name: Pull Docker image
+      run: sudo docker pull ${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION
+    - name: Delete old Docker container
+      run: docker rm -f $DOCKER_CONTAINER || true
+    - name: Run Docker Container
+      run: docker run -d -p 8080:8080 -name $DOCKER_CONTAINER ${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME
+
