@@ -18,10 +18,10 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        echo "${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION"
+        echo "${{secrets.DOCKER_USERNAME}}/aws-cicd-tutorial:latest"
     - name: Build the Docker image
       # run: docker build -t aws-cicd-tutorial .
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/$IMAGE_NAME:$IMAGE_VERSION
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/aws-cicd-tutorial:latest
     - name: Push to Dockerhub
       # run: docker push $DOCKER_USERNAME/aws-cicd-tutorial:latest
-      run: docker push ${{secrets.DOCKER_USER}}/$IMAGE_NAME:$IMAGE_VERSION
+      run: docker push ${{secrets.DOCKER_USER}}/aws-cicd-tutorial:latest
