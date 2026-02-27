@@ -19,8 +19,8 @@ jobs:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        echo "${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION"
+        #docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
     - name: Build the Docker image
       # run: docker build -t aws-cicd-tutorial .
       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/$IMAGE_NAME:$IMAGE_VERSION
